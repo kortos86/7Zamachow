@@ -10,7 +10,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
+        android:text="7 Zamachow"
         app:layout_constraintBottom_toBottomOf="@+id/activity_a3_cards_game"
         app:layout_constraintLeft_toLeftOf="@+id/activity_a3_cards_game"
         app:layout_constraintRight_toRightOf="@+id/activity_a3_cards_game"
