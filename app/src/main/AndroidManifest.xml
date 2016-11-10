@@ -18,6 +18,15 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".MemoryGame"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.OPENABLE" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".A3CardsGame"
             android:screenOrientation="landscape">
             <intent-filter>
