@@ -3,16 +3,25 @@ package com.artpi.games.a7zamachow;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 
 public class PuzzleGame extends AppCompatActivity {
+    private PuzzleLayout gameView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_puzzle_game);
+    }
+
+    public void shuffleOnClick (View V) {
+        //initBitmap();
+        Log.w("PuzzleGame", "Shuffle on click method called");
     }
 
 

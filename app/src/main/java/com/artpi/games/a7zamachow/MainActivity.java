@@ -39,4 +39,10 @@ public class MainActivity extends AppCompatActivity {
         MainActivity.this.startActivity(myIntent);
     }
 
+    public void memoryOnClick (View V) {
+        Intent myIntent = new Intent(MainActivity.this, MemoryGame.class);
+        //myIntent.putExtra("key", value);
+        MainActivity.this.startActivity(myIntent);
+    }
+
 }

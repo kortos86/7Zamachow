@@ -17,7 +17,7 @@ public class ImageSpliter {
         for (int i=0;i<piece;i++){
             for (int j=0;j<piece;j++){
 
-                ImagePiece imagePiece=new ImagePiece();
+                ImagePiece imagePiece = new ImagePiece();
                 imagePiece.setIndex(j+i*piece);
 
                 int x=j*pieceWidth;
