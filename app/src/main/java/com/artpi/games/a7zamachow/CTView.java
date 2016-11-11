@@ -247,7 +247,6 @@ public class CTView extends SurfaceView implements Runnable {
                 for(CardObject card : cards) {
                     if (card.getRegion().contains(_x, _y)) {
                         card.flip(getContext());
-                        Log.i("APP", "Tap Listener: you've tapped card");
                     }
                 }
                     break;
