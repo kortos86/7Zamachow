@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.Region;
 import android.util.Log;
 
 import java.util.EnumMap;
@@ -17,10 +18,13 @@ import java.util.EnumMap;
 
 public class CardObject {
     private boolean moving;
+    private boolean reverse = true;
     private AnimationData anim;
     private Bitmap bitmap;
     private Point cornerCord;
+    private Bitmap front;
     private int speed = 0;
+    private Region reg;
     public enum Pos  {
         LEFT, CENTER, RIGHT
     }
@@ -50,15 +54,7 @@ public class CardObject {
     }
 
     public void update() {
-     /*   if(x>900)
-            left = true;
-        if (x<50)
-            left = false;
 
-        if(left)
-        x-=10;
-        else x+=10;
-        */
     }
     public void drawSelf(Canvas canvas, Paint paint){
         if(moving) {
@@ -78,6 +74,19 @@ public class CardObject {
     public Bitmap getBitmap() {
         return bitmap;
     }
+    public void flip(Context context){
+        if(reverse) {
+            this.bitmap = this.front;
+                    //BitmapFactory.decodeResource
+                    //(context.getResources(), R.drawable.ace_of_diamonds);
+            reverse=false;
+        }
+        else{
+            bitmap = BitmapFactory.decodeResource
+                    (context.getResources(), R.drawable.card_reverse);
+            reverse= true;
+        }
+    }
     public int getSpeed() {
         return speed;
     }
@@ -87,7 +96,12 @@ public class CardObject {
     public int getY() {
         return cornerCord.getY();
     }
-
+    public Region getRegion(){
+        return this.reg;
+    }
+    public void setRegion(Region region){
+        this.reg = region;
+    }
     public Matrix getAnimMatrix(){
         return this.anim.getMatrix();
     }
@@ -104,6 +118,9 @@ public class CardObject {
     }
     public void setPos(Pos p){
         this.pos = p;
+    }
+    public void setFront(Bitmap b){
+        front =b;
     }
 
     public void setTargetPos(Point p){
