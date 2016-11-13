@@ -248,7 +248,7 @@ public class MemoryLayout extends RelativeLayout implements View.OnClickListener
             if (win == items/2)
             {
                 AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(getContext());
-                dlgAlert.setMessage("Congratulations! You have completed the Memory Quest!");
+                dlgAlert.setMessage("Congratulations! You have completed the Memory Quest! ");
                 dlgAlert.setTitle("Great Job!");
                 dlgAlert.setPositiveButton("Ok",
                         new DialogInterface.OnClickListener() {

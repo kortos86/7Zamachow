@@ -3,7 +3,6 @@ package com.artpi.games.a7zamachow;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -11,12 +10,10 @@ import android.support.v7.app.AlertDialog;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -40,6 +37,7 @@ public class PuzzleLayout extends RelativeLayout implements View.OnClickListener
     private int mWidth;//the width of the container
     private int mHeight;//the width of the container
     Button shuffleButton;
+    Stopwatch stopwatch = new Stopwatch();
 
 
     public PuzzleLayout(Context context) {
@@ -138,6 +136,12 @@ public class PuzzleLayout extends RelativeLayout implements View.OnClickListener
 
         shuffleButton.setText("Shuffle");
         addView(shuffleButton,rl);
+
+        RelativeLayout.LayoutParams rl1 = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+        rl1.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+        addView(stopwatch.getStopWatch(getContext()),rl1);
+
+        stopwatch.start();
 
     }
 
@@ -242,7 +246,8 @@ public class PuzzleLayout extends RelativeLayout implements View.OnClickListener
             if (win == 16)
             {
                 AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(getContext());
-                dlgAlert.setMessage("Congratulations! You have completed the Puzzle Quest!");
+                stopwatch.stop();
+                dlgAlert.setMessage("Congratulations! You have completed the Puzzle Quest! " + stopwatch.getTime("%02d:%02d:%03d"));
                 dlgAlert.setTitle("Great Job!");
                 dlgAlert.setPositiveButton("Ok",
                         new DialogInterface.OnClickListener() {
