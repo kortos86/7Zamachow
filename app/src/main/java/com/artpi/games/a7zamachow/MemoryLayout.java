@@ -6,15 +6,12 @@ import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
@@ -25,7 +22,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 public class MemoryLayout extends RelativeLayout implements View.OnClickListener {
 
@@ -97,7 +93,7 @@ public class MemoryLayout extends RelativeLayout implements View.OnClickListener
 
         }
 
-        cardBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.card_reverse);
+        cardBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.mem_reverse);
         mItemsBitmaps = ImageSpliter.splitimage(mBitmap,mColumn);
         visibleBitmaps= new ImagePiece[mColumn*mColumn];
 

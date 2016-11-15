@@ -1,6 +1,7 @@
 package com.artpi.games.a7zamachow;
 
 import android.graphics.Bitmap;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,8 @@ public class ImageSpliter {
 
                 int x=j*pieceWidth;
                 int y=i*pieceWidth;
+
+                //Log.w("Image Spliter", "Image width:  " + pieceWidth);
 
                 imagePiece.setBitmap(Bitmap.createBitmap(bitmap,x,y,pieceWidth,pieceWidth));
 
