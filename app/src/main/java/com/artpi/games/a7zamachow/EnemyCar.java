@@ -28,8 +28,16 @@ public class EnemyCar {
 
 
     // Constructor
-    public EnemyCar(Context context, int screenX, int screenY){
+    public EnemyCar(Context context, int screenX, int screenY, int color){
+
+        if(color == 1){
         bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.enemy);
+        }else if(color == 2){
+            bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.enemy2);
+        } else if(color == 3){
+            bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.enemy3);
+        }
+
         maxX = screenX;
         maxY = screenY;
         minX = 0;

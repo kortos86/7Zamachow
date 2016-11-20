@@ -50,9 +50,9 @@ public class RGView extends SurfaceView implements  Runnable{
         paint = new Paint();
         // Initialize our player ship
         player = new PlayerCar(context, x, y);
-        enemy1 = new EnemyCar(context, x, y);
-        enemy2 = new EnemyCar(context, x, y);
-        enemy3 = new EnemyCar(context, x, y);
+        enemy1 = new EnemyCar(context, x, y, 1);
+        enemy2 = new EnemyCar(context, x, y, 2);
+        enemy3 = new EnemyCar(context, x, y, 3);
 
 
         for (int j = 1; j <= numberOfLinesRows; j++) {

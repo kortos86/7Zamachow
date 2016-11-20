@@ -21,7 +21,7 @@ public class PlayerCar {
     // Constructor
     public PlayerCar(Context context, int screenX, int screenY){
         bitmap = BitmapFactory.decodeResource
-                (context.getResources(), R.drawable.car);
+                (context.getResources(), R.drawable.car2);
         turningLeft = false;
         turningRight = false;
 
