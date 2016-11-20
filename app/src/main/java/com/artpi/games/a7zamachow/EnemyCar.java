@@ -30,14 +30,7 @@ public class EnemyCar {
     // Constructor
     public EnemyCar(Context context, int screenX, int screenY, int color){
 
-        if(color == 1){
-        bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.enemy);
-        }else if(color == 2){
-            bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.enemy2);
-        } else if(color == 3){
-            bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.enemy3);
-        }
-
+        setColor(color,context);
         maxX = screenX;
         maxY = screenY;
         minX = 0;
@@ -56,7 +49,7 @@ public class EnemyCar {
 
     }
 
-    public void update(){
+    public void update(Context context){
         y=y+speed;
 
         if (y> maxY+bitmap.getHeight()){
@@ -66,6 +59,9 @@ public class EnemyCar {
             position = generator.nextInt(4);
             x = maxX/5 *position+140;
             y = 0 - bitmap.getHeight();
+            int color = generator.nextInt(4 -1) +1;
+
+            setColor(color,context);
         }
 
         // Refresh hit box location
@@ -98,5 +94,15 @@ public class EnemyCar {
     }
     public void setY(int y) {
         this.y += y;
+    }
+
+    public void setColor(int i, Context context){
+        if(i == 1){
+            bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.enemy);
+        }else if(i == 2){
+            bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.enemy2);
+        } else if(i == 3){
+            bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.enemy3);
+        }
     }
 }

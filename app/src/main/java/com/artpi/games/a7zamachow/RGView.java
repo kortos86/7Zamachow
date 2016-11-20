@@ -103,6 +103,7 @@ public class RGView extends SurfaceView implements  Runnable{
             enemyBoom  = true;
             handler.removeCallbacks(r2);
         }
+
         if (enemyBoom) {
 
 
@@ -110,9 +111,9 @@ public class RGView extends SurfaceView implements  Runnable{
         }
         // Update the player
         player.update();
-        enemy1.update();
-        enemy2.update();
-        enemy3.update();
+        enemy1.update(getContext());
+        enemy2.update(getContext());
+        enemy3.update(getContext());
         for (RoadLines sd : linesList) {
             sd.update();
         }

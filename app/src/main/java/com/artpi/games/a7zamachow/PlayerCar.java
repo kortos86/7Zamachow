@@ -25,7 +25,7 @@ public class PlayerCar {
         turningLeft = false;
         turningRight = false;
 
-        speed = 1;
+        speed = 15;
 
         x = screenX/2 - bitmap.getWidth()/2;
         y = screenY - bitmap.getHeight();
@@ -40,11 +40,11 @@ public class PlayerCar {
         if (turningLeft) {
             // Log.println(Log.INFO,"1","xxxxxxx should be left");
             // Speed up
-            x = x - 10;
+            x = x - speed;
         } else if (turningRight){
             //Log.println(Log.INFO,"1","xxxxxxx should be right");
             // Slow down
-            x = x + 10;
+            x = x + speed;
         }
         // Constrain top speed
         if (x > maxX) {
