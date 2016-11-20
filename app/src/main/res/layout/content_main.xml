@@ -52,4 +52,14 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:onClick="shootingOnClick" />
+
+    <Button
+        android:text="Racing GAME"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/button5"
+        android:layout_below="@+id/button4"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:onClick="racingOnClick" />
 </RelativeLayout>
