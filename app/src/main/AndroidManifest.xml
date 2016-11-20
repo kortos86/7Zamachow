@@ -54,6 +54,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".RacingGame" android:theme="@android:style/Theme.NoTitleBar.Fullscreen" android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>
