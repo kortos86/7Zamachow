@@ -173,7 +173,7 @@ public class RGView extends SurfaceView implements  Runnable{
     private void control(){
 
         try {
-            gameThread.sleep(17);
+            gameThread.sleep(5);
         } catch (InterruptedException e) {
         }
     }
