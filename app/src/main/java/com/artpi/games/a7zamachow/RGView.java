@@ -159,7 +159,7 @@ public class RGView extends SurfaceView implements  Runnable{
                         (this.getResources(), R.drawable.boom);
                 canvas.drawBitmap(
                         boom,
-                        player.getX()-10,
+                        player.getX(),
                         player.getY()-50,
                         paint);
             }
