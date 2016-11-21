@@ -15,6 +15,7 @@ public class PlayerCar {
     private int maxX;
     private int minX;
     private Rect hitBox;
+    private int shieldStrength;
     //Limit the bounds of the ship's speed
 
 
@@ -33,6 +34,7 @@ public class PlayerCar {
         minX = 0;
         // Initialize the hit box
         hitBox = new Rect(x, y, bitmap.getWidth(), bitmap.getHeight());
+        shieldStrength = 5;
     }
 
     public void update() {
@@ -98,5 +100,13 @@ public class PlayerCar {
     }
     public Rect getHitbox(){
         return hitBox;
+    }
+
+    public int getShieldStrength() {
+        return shieldStrength;
+    }
+
+    public void reduceShieldStrength(){
+        shieldStrength --;
     }
 }

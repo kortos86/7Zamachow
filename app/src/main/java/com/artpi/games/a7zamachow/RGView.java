@@ -1,6 +1,7 @@
 package com.artpi.games.a7zamachow;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -18,6 +19,9 @@ import java.util.ArrayList;
 
 
 public class RGView extends SurfaceView implements  Runnable{
+    private SharedPreferences prefs;
+    private SharedPreferences.Editor editor;
+    private Context context;
     boolean firstrun = true;
     volatile boolean playing;
     Thread gameThread = null;
@@ -34,22 +38,38 @@ public class RGView extends SurfaceView implements  Runnable{
     private Canvas canvas;
     private SurfaceHolder ourHolder;
     float x1,x2;
-    float maxX;
-    float maxY;
+    int maxX;
+    int maxY;
     int numberOfLines =5;
     int numberOfLinesRows=6;
     boolean enemyBoom  = false;
+    private float distanceRemaining;
+    private long timeTaken;
+    private long timeStarted;
+    private long fastestTime;
+    private boolean gameEnded;
+
 
 
     public RGView(Context context, int x, int y) {
         super(context);
+        this.context = context;
+        // Get a reference to a file called HiScores.
+        // If id doesn't exist one is created
+        prefs = context.getSharedPreferences("HiScores",context.MODE_PRIVATE);
+        // Initialize the editor ready
+        editor = prefs.edit();
+        // Load fastest time from a entry in the file
+        // labeled "fastestTime"
+        // if not available highscore = 1000000
+        fastestTime = prefs.getLong("fastestTime", 1000000);
         maxX=x;
         maxY=y;
         // Initialize our drawing objects
         ourHolder = getHolder();
         paint = new Paint();
         // Initialize our player ship
-        player = new PlayerCar(context, x, y);
+        /*player = new PlayerCar(context, x, y);
         enemy1 = new EnemyCar(context, x, y, 1);
         enemy2 = new EnemyCar(context, x, y, 2);
        // enemy3 = new EnemyCar(context, x, y, 3);
@@ -60,7 +80,28 @@ public class RGView extends SurfaceView implements  Runnable{
                 RoadLines spec = new RoadLines(context, x, y, i, j);
                 linesList.add(spec);
             }
+        }*/
+        startGame();
+    }
+
+    private void startGame(){
+        //Initialize game objects
+        player = new PlayerCar(context, maxX, maxY);
+        enemy1 = new EnemyCar(context, maxX, maxY, 1);
+        enemy2 = new EnemyCar(context, maxX, maxY, 2);
+
+        for (int j = 1; j <= numberOfLinesRows; j++) {
+            for (int i = 0; i < numberOfLines; i++) {
+                RoadLines spec = new RoadLines(context, maxX, maxY, i, j);
+                linesList.add(spec);
+            }
         }
+        // Reset time and distance
+        distanceRemaining = 30000;// 10 km
+        timeTaken = 0;
+        // Get start time
+        timeStarted = System.currentTimeMillis();
+        gameEnded= false;
     }
 
 
@@ -105,8 +146,11 @@ public class RGView extends SurfaceView implements  Runnable{
         }*/
 
         if (enemyBoom) {
-
-
+            player.reduceShieldStrength();
+            if (player.getShieldStrength() < 1) {
+                gameEnded = true;
+            }
+            enemyBoom= false;
             handler.postDelayed(r2, 500);
         }
         // Update the player
@@ -116,6 +160,26 @@ public class RGView extends SurfaceView implements  Runnable{
         //enemy3.update(getContext());
         for (RoadLines sd : linesList) {
             sd.update();
+        }
+        if(!gameEnded) {
+            //subtract distance to home planet based on current speed
+            distanceRemaining -= player.getSpeed();
+            //How long has the player been flying
+            timeTaken = System.currentTimeMillis() - timeStarted;
+        }
+        //Completed the game!
+        if(distanceRemaining < 0){
+        //check for new fastest time
+            if(timeTaken < fastestTime) {
+                editor.putLong("fastestTime", timeTaken);
+                editor.commit();
+                fastestTime = timeTaken;
+            }
+            // avoid ugly negative numbers
+            // in the HUD
+            distanceRemaining = 0;
+        // Now end the game
+            gameEnded = true;
         }
     }
 
@@ -163,6 +227,32 @@ public class RGView extends SurfaceView implements  Runnable{
                         player.getX(),
                         player.getY()-50,
                         paint);
+            }
+            if(!gameEnded){
+            // Draw the hud
+            paint.setTextAlign(Paint.Align.LEFT);
+            paint.setColor(Color.argb(255, 0, 0, 0));
+            paint.setTextSize(40);
+            canvas.drawText("Fastest:"+ fastestTime + "s", 10, 40, paint);
+            canvas.drawText("Time:" + timeTaken + "s", 10, 80,paint);
+            canvas.drawText("Distance:" + distanceRemaining  +" M", 10, 120, paint);
+            canvas.drawText("Shield:" + player.getShieldStrength(), 10, 160, paint);
+            canvas.drawText("Speed:" + player.getSpeed() * 60 + " MPS", 10, 200, paint);
+            }else{
+                // Show pause screen
+                paint.setTextSize(80);
+                paint.setTextAlign(Paint.Align.CENTER);
+                paint.setColor(Color.argb(255, 0, 0, 0));
+                canvas.drawText("Game Over", maxX/2, 100, paint);
+                paint.setTextSize(25);
+                canvas.drawText("Fastest:"+
+                        fastestTime + "s", maxX/2, 160, paint);
+                canvas.drawText("Time:" + timeTaken +
+                        "s", maxX / 2, 200, paint);
+                canvas.drawText("Distance remaining:" +
+                        distanceRemaining/1000 + " KM",maxX/2, 240, paint);
+                paint.setTextSize(80);
+                canvas.drawText("Tap to replay!", maxX/2, 350, paint);
             }
             // Unlock and draw the scene
             ourHolder.unlockCanvasAndPost(canvas);
@@ -218,6 +308,10 @@ public class RGView extends SurfaceView implements  Runnable{
                 }else{
                     player.turnRight();
                     Log.println(Log.INFO,"1","xxxxxxx right");
+                }
+                // If we are currently on the pause screen, start a new game
+                if(gameEnded){
+                    startGame();
                 }
                 break;
         }
