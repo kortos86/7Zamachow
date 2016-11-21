@@ -52,7 +52,7 @@ public class RGView extends SurfaceView implements  Runnable{
         player = new PlayerCar(context, x, y);
         enemy1 = new EnemyCar(context, x, y, 1);
         enemy2 = new EnemyCar(context, x, y, 2);
-        enemy3 = new EnemyCar(context, x, y, 3);
+       // enemy3 = new EnemyCar(context, x, y, 3);
 
 
         for (int j = 1; j <= numberOfLinesRows; j++) {
@@ -97,12 +97,12 @@ public class RGView extends SurfaceView implements  Runnable{
             enemyBoom  = true;
             handler.removeCallbacks(r2);
         }
-        if(Rect.intersects
+       /* if(Rect.intersects
                 (player.getHitbox(), enemy3.getHitbox())){
             enemy3.setY(+1000);
             enemyBoom  = true;
             handler.removeCallbacks(r2);
-        }
+        }*/
 
         if (enemyBoom) {
 
@@ -113,7 +113,7 @@ public class RGView extends SurfaceView implements  Runnable{
         player.update();
         enemy1.update(getContext());
         enemy2.update(getContext());
-        enemy3.update(getContext());
+        //enemy3.update(getContext());
         for (RoadLines sd : linesList) {
             sd.update();
         }
@@ -149,10 +149,10 @@ public class RGView extends SurfaceView implements  Runnable{
                     (enemy2.getBitmap(),
                             enemy2.getX(),
                             enemy2.getY(), paint);
-            canvas.drawBitmap
+            /*canvas.drawBitmap
                     (enemy3.getBitmap(),
                             enemy3.getX(),
-                            enemy3.getY(), paint);
+                            enemy3.getY(), paint);*/
 
 
             if(enemyBoom){

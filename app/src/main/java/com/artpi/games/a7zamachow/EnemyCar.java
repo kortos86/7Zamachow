@@ -25,21 +25,27 @@ public class EnemyCar {
     private int minY;
     int position;
     private Rect hitBox;
+    int pos;
 
 
     // Constructor
-    public EnemyCar(Context context, int screenX, int screenY, int color){
-
+    public EnemyCar(Context context, int screenX, int screenY, int posi){
+        Random generator = new Random();
+        int color= generator.nextInt(4-1)+1;
         setColor(color,context);
         maxX = screenX;
         maxY = screenY;
         minX = 0;
         minY = 0;
-
-        Random generator = new Random();
+        pos = posi;
         speed = generator.nextInt(6)+25;
 
-        position = generator.nextInt(4);
+        if (pos == 1) {
+            position = generator.nextInt(2);
+        }else if(pos == 2){
+            position = generator.nextInt(4-2)+2;
+        }
+
         Log.println(Log.INFO,"1","xxxxxxx position" + position);
 
         x = maxX/5 *position+140;
@@ -56,7 +62,12 @@ public class EnemyCar {
             Random generator = new Random();
             speed = generator.nextInt(6)+25;
             //x = generator.nextInt(maxX) - bitmap.getWidth();
-            position = generator.nextInt(4);
+            if (pos == 1) {
+                position = generator.nextInt(2);
+            }else if(pos == 2){
+                position = generator.nextInt(4-2)+2;
+            }
+
             x = maxX/5 *position+140;
             y = 0 - bitmap.getHeight();
             int color = generator.nextInt(4 -1) +1;
