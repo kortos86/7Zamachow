@@ -8,7 +8,8 @@ import android.graphics.Rect;
 public class PlayerCar {
     private Bitmap bitmap;
     private int x, y;
-    private int speed = 0;
+    private int speed = 25;
+    private int turningSpeed=15;
     private boolean turningLeft;
     private boolean turningRight;
     // Stop ship leaving the screen
@@ -25,9 +26,6 @@ public class PlayerCar {
                 (context.getResources(), R.drawable.car2);
         turningLeft = false;
         turningRight = false;
-
-        speed = 15;
-
         x = screenX/2 - bitmap.getWidth()/2;
         y = screenY - bitmap.getHeight();
         maxX = screenX - bitmap.getWidth();
@@ -42,11 +40,11 @@ public class PlayerCar {
         if (turningLeft) {
             // Log.println(Log.INFO,"1","xxxxxxx should be left");
             // Speed up
-            x = x - speed;
+            x = x - turningSpeed;
         } else if (turningRight){
             //Log.println(Log.INFO,"1","xxxxxxx should be right");
             // Slow down
-            x = x + speed;
+            x = x + turningSpeed;
         }
         // Constrain top speed
         if (x > maxX) {
@@ -56,15 +54,6 @@ public class PlayerCar {
         if (x < 0) {
             x = 0;
         }
-        // move the ship up or down
-        // But don't let ship stray off screen
-        /*if (y < minX) {
-            y = minX;
-        }
-        if (y > maxX) {
-            y = maxX;
-        }*/
-        // Refresh hit box location
         hitBox.left = x;
         hitBox.top = y;
         hitBox.right = x + bitmap.getWidth();
@@ -77,6 +66,9 @@ public class PlayerCar {
     }
     public int getSpeed() {
         return speed;
+    }
+    public void setSpeed(int speed2) {
+        speed = speed2;
     }
     public int getX() {
         return x;

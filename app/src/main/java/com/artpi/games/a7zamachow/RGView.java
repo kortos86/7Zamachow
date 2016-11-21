@@ -43,6 +43,7 @@ public class RGView extends SurfaceView implements  Runnable{
     int numberOfLines =5;
     int numberOfLinesRows=6;
     boolean enemyBoom  = false;
+    boolean removeShield = false;
     private float distanceRemaining;
     private long timeTaken;
     private long timeStarted;
@@ -108,7 +109,9 @@ public class RGView extends SurfaceView implements  Runnable{
     @Override
     public void run() {
         while (playing) {
+            if(!gameEnded){
             update();
+            }
             draw();
             control();
         }
@@ -118,6 +121,12 @@ public class RGView extends SurfaceView implements  Runnable{
     final Runnable r2 = new Runnable() {
         public void run() {
             enemyBoom = false;
+        }
+    };
+    final Runnable r3 = new Runnable() {
+        public void run() {
+            enemyBoom = false;
+            player.setSpeed(25);
         }
     };
     private void update(){
@@ -130,33 +139,36 @@ public class RGView extends SurfaceView implements  Runnable{
                 (player.getHitbox(), enemy1.getHitbox())){
             enemy1.setY(+1000);
             enemyBoom  = true;
+            removeShield  = true;
             handler.removeCallbacks(r2);
+            handler.removeCallbacks(r3);
         }
         if(Rect.intersects
                 (player.getHitbox(), enemy2.getHitbox())){
             enemy2.setY(+1000);
             enemyBoom  = true;
+            removeShield  = true;
             handler.removeCallbacks(r2);
+            handler.removeCallbacks(r3);
         }
-       /* if(Rect.intersects
-                (player.getHitbox(), enemy3.getHitbox())){
-            enemy3.setY(+1000);
-            enemyBoom  = true;
-            handler.removeCallbacks(r2);
-        }*/
 
         if (enemyBoom) {
+            player.setSpeed(5);
+            handler.postDelayed(r2, 500);
+            handler.postDelayed(r3, 2000);
+        }
+
+        if (removeShield){
             player.reduceShieldStrength();
             if (player.getShieldStrength() < 1) {
                 gameEnded = true;
             }
-            enemyBoom= false;
-            handler.postDelayed(r2, 500);
+            removeShield=false;
         }
         // Update the player
         player.update();
-        enemy1.update(getContext());
-        enemy2.update(getContext());
+        enemy1.update(getContext(), player.getSpeed());
+        enemy2.update(getContext(), player.getSpeed());
         //enemy3.update(getContext());
         for (RoadLines sd : linesList) {
             sd.update();
@@ -164,6 +176,7 @@ public class RGView extends SurfaceView implements  Runnable{
         if(!gameEnded) {
             //subtract distance to home planet based on current speed
             distanceRemaining -= player.getSpeed();
+            Log.println(Log.INFO,"aa","yyyyyy" + (50-player.getSpeed()) );
             //How long has the player been flying
             timeTaken = System.currentTimeMillis() - timeStarted;
         }

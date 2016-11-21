@@ -26,11 +26,11 @@ public class EnemyCar {
     int position;
     private Rect hitBox;
     int pos;
+    Random generator = new Random();
 
 
     // Constructor
     public EnemyCar(Context context, int screenX, int screenY, int posi){
-        Random generator = new Random();
         int color= generator.nextInt(4-1)+1;
         setColor(color,context);
         maxX = screenX;
@@ -55,12 +55,11 @@ public class EnemyCar {
 
     }
 
-    public void update(Context context){
-        y=y+speed;
+    public void update(Context context, int playerSpeed){
+        y=y+playerSpeed;
 
         if (y> maxY+bitmap.getHeight()){
-            Random generator = new Random();
-            speed = generator.nextInt(6)+25;
+            speed = generator.nextInt(6)+playerSpeed;
             //x = generator.nextInt(maxX) - bitmap.getWidth();
             if (pos == 1) {
                 position = generator.nextInt(2);
@@ -115,5 +114,9 @@ public class EnemyCar {
         } else if(i == 3){
             bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.enemy3);
         }
+    }
+
+    public void setSpeed(int speed2){
+        speed= generator.nextInt(6)+speed2;
     }
 }
