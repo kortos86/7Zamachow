@@ -236,8 +236,16 @@ public class RGView extends SurfaceView implements  Runnable{
             canvas.drawText("Fastest:"+ fastestTime + "s", 10, 40, paint);
             canvas.drawText("Time:" + timeTaken + "s", 10, 80,paint);
             canvas.drawText("Distance:" + distanceRemaining  +" M", 10, 120, paint);
-            canvas.drawText("Shield:" + player.getShieldStrength(), 10, 160, paint);
-            canvas.drawText("Speed:" + player.getSpeed() * 60 + " MPS", 10, 200, paint);
+            canvas.drawText("Shield:" , 10, 170, paint);
+                paint.setColor(Color.argb(255, 255, 0, 0));
+                for (int i = 0; i < player.getShieldStrength(); i++) {
+                    Bitmap shield = BitmapFactory.decodeResource
+                            (this.getResources(), R.drawable.shield);
+                    canvas.drawBitmap(shield, 140 + i*40,130,paint);
+                   // canvas.drawRect( 180 + i*40,140,180+ i*40+20,160,paint);
+                }
+                paint.setColor(Color.argb(255, 0, 0, 0));
+            canvas.drawText("Speed:" + player.getSpeed() * 60 + " MPS", 10, 220, paint);
             }else{
                 // Show pause screen
                 paint.setTextSize(80);
