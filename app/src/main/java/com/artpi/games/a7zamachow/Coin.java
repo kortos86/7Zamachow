@@ -15,8 +15,9 @@ import java.util.Random;
 public class Coin {
 
     private Bitmap bitmap;
+    Random generator = new Random();
     private int x, y;
-    private int speed = 5;
+    private int speed = generator.nextInt(6);
     // Detect  coin leaving the screen
     private int maxX;
     private int minX;
@@ -26,7 +27,7 @@ public class Coin {
     private Rect hitBox;
     int rotuj = 1;
     int delay =0;
-    Random generator = new Random();
+
 
 
     // Constructor
@@ -37,7 +38,7 @@ public class Coin {
         maxY = screenY;
         minX = 0;
         minY = 0;
-        speed = 5;
+        speed = generator.nextInt(6);
         x = generator.nextInt(maxX)- bitmap.getWidth();
         y = 0 - bitmap.getHeight();
         // Initialize the hit box

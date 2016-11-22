@@ -38,8 +38,8 @@ public class SandPoint {
         y += speed;
 //respawn space dust
         if( y > maxY){
-            y = 0;
             Random generator = new Random();
+            y = generator.nextInt(20)-40;
             x = generator.nextInt(maxX);
             speed = 5;
         }

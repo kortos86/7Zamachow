@@ -117,11 +117,12 @@ public class RGView extends SurfaceView implements  Runnable{
     @Override
     public void run() {
         while (playing) {
-            if(!gameEnded){
-            update();
-            }
+            if (!gameEnded) {
+                update();
+
             draw();
             control();
+            }
         }
     }
 

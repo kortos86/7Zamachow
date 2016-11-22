@@ -16,7 +16,7 @@ public class EnemyCar {
 
     private Bitmap bitmap;
     private int x, y;
-    private int speed = 1;
+    private int speed;
     // Detect enemies leaving the screen
     private int maxX;
     private int minX;
@@ -39,7 +39,7 @@ public class EnemyCar {
         minX = 0;
         minY = 0;
         pos = posi;
-        speed = generator.nextInt(6)+25;
+        speed = generator.nextInt(6);
 
         if (pos == 1) {
             position = generator.nextInt(2);
@@ -56,9 +56,10 @@ public class EnemyCar {
 
     public void update(Context context, int playerSpeed){
         y=y+playerSpeed;
+        y+=speed;
 
         if (y> maxY+bitmap.getHeight()){
-            speed = generator.nextInt(6)+playerSpeed;
+            speed = generator.nextInt(6);
             //x = generator.nextInt(maxX) - bitmap.getWidth();
             if (pos == 1) {
                 position = generator.nextInt(2);
