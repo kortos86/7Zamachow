@@ -1,15 +1,8 @@
 package com.artpi.games.a7zamachow;
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.util.Log;
-
 import java.util.Random;
 
 
-/**
- * Created by gruca on 11/19/2016.
- */
 
 public class SandPoint {
     private int x, y;
@@ -17,14 +10,12 @@ public class SandPoint {
     // Detect dust leaving the screen
     private int maxX;
     private int maxY;
-    private int minX;
-    private int minY;
+
     // Constructor
     public SandPoint(int screenX, int screenY){
         maxX = screenX;
         maxY = screenY;
-        minX = 0;
-        minY = 0;
+
 // Set a speed between 0 and 9
         Random generator = new Random();
         speed = 5;

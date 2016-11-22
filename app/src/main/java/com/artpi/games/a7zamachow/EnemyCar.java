@@ -4,74 +4,57 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
-import android.util.Log;
 
 import java.util.Random;
 
-/**
- * Created by gruca on 11/19/2016.
- */
 
 public class EnemyCar {
-
+    //Image of the car presented to user
     private Bitmap bitmap;
+    //Holds position on image
     private int x, y;
+    //car default speed
     private int speed;
     // Detect enemies leaving the screen
     private int maxX;
-    private int minX;
     // Spawn enemies within screen bounds
     private int maxY;
-    private int minY;
     int position;
     private Rect hitBox;
-    int pos;
+    int whichLines;
     Random generator = new Random();
 
 
     // Constructor
     public EnemyCar(Context context, int screenX, int screenY, int posi){
-        bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.enemy);
-        int color= generator.nextInt(4-1)+1;
-        setColor(color,context);
+        //generates and Set color for the Enemy car 1 2 or 3
+        setColor(context);
         maxX = screenX;
         maxY = screenY;
-        minX = 0;
-        minY = 0;
-        pos = posi;
+        //defines if car should be located on line 1.2 or 3.4
+        whichLines = posi;
+        //Sets Enemy car speed
         speed = generator.nextInt(6);
+        position = setLine(whichLines);
 
-        if (pos == 1) {
-            position = generator.nextInt(2);
-        }else if(pos == 2){
-            position = generator.nextInt(4-2)+2;
-        }
-
+        //Sets car in proper position !!!!!!!!!!!!!!!!!!!!!!! TO BE VALIDATED
         x = maxX/5 *position+140;
         y = 0 - bitmap.getHeight();
         // Initialize the hit box
         hitBox = new Rect(x, y, bitmap.getWidth(), bitmap.getHeight());
 
     }
-
     public void update(Context context, int playerSpeed){
-        y=y+playerSpeed;
-        y+=speed;
-
+        //Move enemy car down, taking into account player speed and coin speed
+        y += playerSpeed;
+        y += speed;
+        //If enemy car left the screen respawn it on top with different color.
         if (y> maxY+bitmap.getHeight()){
             speed = generator.nextInt(6);
-            //x = generator.nextInt(maxX) - bitmap.getWidth();
-            if (pos == 1) {
-                position = generator.nextInt(2);
-            }else if(pos == 2){
-                position = generator.nextInt(4-2)+2;
-            }
-
+            position = setLine(whichLines);
             x = maxX/5 *position+140;
             y = 0 - bitmap.getHeight();
-            int color = generator.nextInt(4 -1) +1;
-
-            setColor(color,context);
+            setColor(context);
         }
 
         // Refresh hit box location
@@ -81,8 +64,6 @@ public class EnemyCar {
         hitBox.bottom = y + bitmap.getHeight();
 
     }
-
-
     //Getters and Setters
     public Bitmap getBitmap(){
         return bitmap;
@@ -96,27 +77,30 @@ public class EnemyCar {
     public Rect getHitbox(){
         return hitBox;
     }
-
-    // This is used by the TDView update() method to
-    // Make an enemy out of bounds and force a re-spawn
     public void setX(int x) {
         this.x = x;
     }
     public void setY(int y) {
-        this.y += y;
+        this.y = y;
     }
 
-    public void setColor(int i, Context context){
-        if(i == 1){
+    public void setColor( Context context){
+        int color = generator.nextInt(4 -1) +1;
+        if(color == 1){
             bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.enemy);
-        }else if(i == 2){
+        }else if(color == 2){
             bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.enemy2);
-        } else if(i == 3){
+        } else if(color == 3){
             bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.enemy3);
         }
     }
-
-    public void setSpeed(int speed2){
-        speed= generator.nextInt(6)+speed2;
+    public int setLine(int whichLines){
+        if (whichLines == 1) {
+            return  generator.nextInt(2);
+        }else if(whichLines == 2){
+            return generator.nextInt(4-2)+2;
+        }else{
+            return 0;
+        }
     }
 }
