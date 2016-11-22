@@ -92,13 +92,13 @@ public class EnemyCar {
         }
     }
 
-    public void setCarPosition(int costam){
-        if(costam == 1){
+    public void setCarPosition(int side){
+        if(side == 1){
             x = generator.nextInt(maxX/2-bitmap.getWidth());
             if (x<0){
                 x=0;
             }
-        }else if (costam==2){
+        }else if (side==2){
             x= generator.nextInt((maxX-bitmap.getWidth()) - maxX/2) + maxX/2 +1;
             if (x>maxX){
                 x=maxX-bitmap.getWidth();
