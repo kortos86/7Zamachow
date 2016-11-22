@@ -1,8 +1,12 @@
 package com.artpi.games.a7zamachow;
 
 import android.app.Activity;
+import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.view.Display;
+import android.view.SurfaceView;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 
 public class RacingGame extends Activity {
@@ -19,11 +23,11 @@ public class RacingGame extends Activity {
         // Get a Display object to access screen details
         Display display = getWindowManager().getDefaultDisplay();
 // Load the resolution into a Point object
-        android.graphics.Point size = new android.graphics.Point();
-        display.getSize(size);
-        gameView = new RGView(this, size.x, size.y);
+       android.graphics.Point size = new android.graphics.Point();
+       display.getSize(size);
+       gameView = new RGView(this, size.x, size.y);
         // Make our gameView the view for the Activity
-        setContentView(gameView);
+       setContentView(gameView);
 
     }
     // If the Activity is paused make sure to pause our thread

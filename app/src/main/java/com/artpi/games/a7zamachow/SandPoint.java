@@ -4,14 +4,14 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.Log;
 
+import java.util.Random;
 
 
 /**
  * Created by gruca on 11/19/2016.
  */
 
-public class RoadLines {
-    private Bitmap bitmap;
+public class SandPoint {
     private int x, y;
     private int speed;
     // Detect dust leaving the screen
@@ -19,31 +19,29 @@ public class RoadLines {
     private int maxY;
     private int minX;
     private int minY;
-    int cosdziwnego;
     // Constructor
-    public RoadLines(Context context, int screenX, int screenY, int linenumber, int lineheight){
+    public SandPoint(int screenX, int screenY){
         maxX = screenX;
         maxY = screenY;
         minX = 0;
         minY = 0;
-        speed = 20;
-
-        cosdziwnego = maxY / 4;
-
+// Set a speed between 0 and 9
+        Random generator = new Random();
+        speed = 5;
         // Set the starting coordinates
-        x = maxX/5 *linenumber +100;
-        y = cosdziwnego *lineheight -cosdziwnego;
-
-
-        Log.println(Log.INFO,"tag","x = "+x + " y= "+y);
+        x = generator.nextInt(maxX);
+        y = generator.nextInt(maxY);
     }
-    public void update(){
-        // Speed up when the player does
-
-        y = y + speed;
-        //respawn space dust
-        if(y > maxY){
-            y = 0 - cosdziwnego;
+    public void update(int playerSpeed){
+// Speed up when the player does
+        y += playerSpeed;
+        y += speed;
+//respawn space dust
+        if( y > maxY){
+            y = 0;
+            Random generator = new Random();
+            x = generator.nextInt(maxX);
+            speed = 5;
         }
     }
     // Getters and Setters
@@ -53,10 +51,4 @@ public class RoadLines {
     public int getY() {
         return y;
     }
-
-    public int getCosDziwnego(){
-        return cosdziwnego;
-    }
-
-
 }

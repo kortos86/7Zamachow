@@ -31,6 +31,7 @@ public class EnemyCar {
 
     // Constructor
     public EnemyCar(Context context, int screenX, int screenY, int posi){
+        bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.enemy);
         int color= generator.nextInt(4-1)+1;
         setColor(color,context);
         maxX = screenX;
@@ -45,8 +46,6 @@ public class EnemyCar {
         }else if(pos == 2){
             position = generator.nextInt(4-2)+2;
         }
-
-        Log.println(Log.INFO,"1","xxxxxxx position" + position);
 
         x = maxX/5 *position+140;
         y = 0 - bitmap.getHeight();

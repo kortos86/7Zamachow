@@ -38,11 +38,9 @@ public class PlayerCar {
     public void update() {
         // Are we boosting?
         if (turningLeft) {
-            // Log.println(Log.INFO,"1","xxxxxxx should be left");
             // Speed up
             x = x - turningSpeed;
         } else if (turningRight){
-            //Log.println(Log.INFO,"1","xxxxxxx should be right");
             // Slow down
             x = x + turningSpeed;
         }

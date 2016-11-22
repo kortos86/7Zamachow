@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.os.Handler;
 import android.os.Looper;
@@ -29,10 +30,10 @@ public class RGView extends SurfaceView implements  Runnable{
     private PlayerCar player;
     public EnemyCar enemy1;
     public EnemyCar enemy2;
-    public EnemyCar enemy3;
+    public Coin coin;
 
     // Make some random space dust
-    public ArrayList<RoadLines> linesList = new ArrayList<>();
+    public ArrayList<SandPoint> sandPoints = new ArrayList<>();
     // For drawing
     private Paint paint;
     private Canvas canvas;
@@ -40,8 +41,6 @@ public class RGView extends SurfaceView implements  Runnable{
     float x1,x2;
     int maxX;
     int maxY;
-    int numberOfLines =5;
-    int numberOfLinesRows=6;
     boolean enemyBoom  = false;
     boolean removeShield = false;
     private float distanceRemaining;
@@ -49,6 +48,27 @@ public class RGView extends SurfaceView implements  Runnable{
     private long timeStarted;
     private long fastestTime;
     private boolean gameEnded;
+    boolean collectedCoin = false;
+
+    Handler handler = new Handler(Looper.getMainLooper());
+    final Runnable r2 = new Runnable() {
+        public void run() {
+            enemyBoom = false;
+        }
+    };
+    final Runnable r3 = new Runnable() {
+        public void run() {
+            enemyBoom = false;
+            player.setSpeed(25);
+        }
+    };
+
+    final Runnable r4 = new Runnable() {
+        public void run() {
+            collectedCoin = false;
+            player.setSpeed(25);
+        }
+    };
 
 
 
@@ -69,19 +89,6 @@ public class RGView extends SurfaceView implements  Runnable{
         // Initialize our drawing objects
         ourHolder = getHolder();
         paint = new Paint();
-        // Initialize our player ship
-        /*player = new PlayerCar(context, x, y);
-        enemy1 = new EnemyCar(context, x, y, 1);
-        enemy2 = new EnemyCar(context, x, y, 2);
-       // enemy3 = new EnemyCar(context, x, y, 3);
-
-
-        for (int j = 1; j <= numberOfLinesRows; j++) {
-            for (int i = 0; i < numberOfLines; i++) {
-                RoadLines spec = new RoadLines(context, x, y, i, j);
-                linesList.add(spec);
-            }
-        }*/
         startGame();
     }
 
@@ -90,12 +97,13 @@ public class RGView extends SurfaceView implements  Runnable{
         player = new PlayerCar(context, maxX, maxY);
         enemy1 = new EnemyCar(context, maxX, maxY, 1);
         enemy2 = new EnemyCar(context, maxX, maxY, 2);
+        coin = new Coin(context, maxX, maxY);
 
-        for (int j = 1; j <= numberOfLinesRows; j++) {
-            for (int i = 0; i < numberOfLines; i++) {
-                RoadLines spec = new RoadLines(context, maxX, maxY, i, j);
-                linesList.add(spec);
-            }
+        int howMuchSand = 100;
+
+        for (int j = 1; j <= howMuchSand; j++) {
+                SandPoint spec = new SandPoint( maxX, maxY);
+                sandPoints.add(spec);
         }
         // Reset time and distance
         distanceRemaining = 30000;// 10 km
@@ -117,18 +125,7 @@ public class RGView extends SurfaceView implements  Runnable{
         }
     }
 
-    Handler handler = new Handler(Looper.getMainLooper());
-    final Runnable r2 = new Runnable() {
-        public void run() {
-            enemyBoom = false;
-        }
-    };
-    final Runnable r3 = new Runnable() {
-        public void run() {
-            enemyBoom = false;
-            player.setSpeed(25);
-        }
-    };
+
     private void update(){
         // Collision detection on new positions
         // Before move because we are testing last frames
@@ -152,6 +149,20 @@ public class RGView extends SurfaceView implements  Runnable{
             handler.removeCallbacks(r3);
         }
 
+        if(Rect.intersects
+                (player.getHitbox(), coin.getHitbox())){
+            coin.setY(+1000);
+            collectedCoin  = true;
+            handler.removeCallbacks(r4);
+        }
+
+        if (collectedCoin) {
+            player.setSpeed(45);
+            handler.postDelayed(r4, 1000);
+            collectedCoin = false;
+        }
+
+
         if (enemyBoom) {
             player.setSpeed(5);
             handler.postDelayed(r2, 500);
@@ -169,14 +180,14 @@ public class RGView extends SurfaceView implements  Runnable{
         player.update();
         enemy1.update(getContext(), player.getSpeed());
         enemy2.update(getContext(), player.getSpeed());
+        coin.update(getContext(),player.getSpeed());
         //enemy3.update(getContext());
-        for (RoadLines sd : linesList) {
-            sd.update();
+        for (SandPoint sd : sandPoints) {
+            sd.update(player.getSpeed());
         }
         if(!gameEnded) {
             //subtract distance to home planet based on current speed
             distanceRemaining -= player.getSpeed();
-            Log.println(Log.INFO,"aa","yyyyyy" + (50-player.getSpeed()) );
             //How long has the player been flying
             timeTaken = System.currentTimeMillis() - timeStarted;
         }
@@ -202,44 +213,24 @@ public class RGView extends SurfaceView implements  Runnable{
             //First we lock the area of memory we will be drawing to
             canvas = ourHolder.lockCanvas();
             // Rub out the last frame
-            canvas.drawColor(Color.argb(255, 169, 169, 169));
-            // White specs of dust
-            paint.setColor(Color.argb(255, 255, 255, 255));
-            for (int i = 0; i < numberOfLines*numberOfLinesRows; i++) {
-                canvas.drawRect( linesList.get(i).getX(),
-                        linesList.get(i).getY(),
-                        linesList.get(i).getX()+20,
-                        linesList.get(i).getY()+linesList.get(i).getCosDziwnego()-100,paint);
+            canvas.drawColor(Color.rgb(197,178,128));
+              // White specs of dust
+            paint.setColor(Color.rgb(59,51,28));
+            for (SandPoint sd : sandPoints) {
+                Log.println(Log.INFO,"xxx","xxxxxxxxxxxxxxxxx draw sand at "+ sd.getX() + " " + sd.getY() + "paint colro "+ paint.getColor());
+               // canvas.drawPoint(sd.getX(), sd.getY(), paint);
+                canvas.drawRect(sd.getX(),sd.getY(),sd.getX()+5,sd.getY()+5,paint);
             }
 
             // Draw the player
-            canvas.drawBitmap(
-                    player.getBitmap(),
-                    player.getX(),
-                    player.getY(),
-                    paint);
-            canvas.drawBitmap
-                    (enemy1.getBitmap(),
-                            enemy1.getX(),
-                            enemy1.getY(), paint);
-            canvas.drawBitmap
-                    (enemy2.getBitmap(),
-                            enemy2.getX(),
-                            enemy2.getY(), paint);
-            /*canvas.drawBitmap
-                    (enemy3.getBitmap(),
-                            enemy3.getX(),
-                            enemy3.getY(), paint);*/
-
+            canvas.drawBitmap(player.getBitmap(), player.getX(), player.getY(), paint);
+            canvas.drawBitmap(enemy1.getBitmap(), enemy1.getX(), enemy1.getY(), paint);
+            canvas.drawBitmap(enemy2.getBitmap(), enemy2.getX(), enemy2.getY(), paint);
+            canvas.drawBitmap(coin.getBitmap(), coin.getX(), coin.getY(), paint);
 
             if(enemyBoom){
-                Bitmap boom = BitmapFactory.decodeResource
-                        (this.getResources(), R.drawable.boom);
-                canvas.drawBitmap(
-                        boom,
-                        player.getX(),
-                        player.getY()-50,
-                        paint);
+                Bitmap boom = BitmapFactory.decodeResource(this.getResources(), R.drawable.boom);
+                canvas.drawBitmap( boom, player.getX(), player.getY()-50, paint);
             }
             if(!gameEnded){
             // Draw the hud
@@ -285,7 +276,7 @@ public class RGView extends SurfaceView implements  Runnable{
     private void control(){
 
         try {
-            gameThread.sleep(5);
+            gameThread.sleep(2);
         } catch (InterruptedException e) {
         }
     }
