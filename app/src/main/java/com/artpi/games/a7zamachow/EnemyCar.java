@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
+import android.util.Log;
 
 import java.util.Random;
 
@@ -19,26 +20,23 @@ public class EnemyCar {
     private int maxX;
     // Spawn enemies within screen bounds
     private int maxY;
-    int position;
     private Rect hitBox;
-    int whichLines;
+    int sideOfScreen;
     Random generator = new Random();
 
 
     // Constructor
-    public EnemyCar(Context context, int screenX, int screenY, int posi){
+    public EnemyCar(Context context, int screenX, int screenY, int side){
         //generates and Set color for the Enemy car 1 2 or 3
         setColor(context);
         maxX = screenX;
         maxY = screenY;
         //defines if car should be located on line 1.2 or 3.4
-        whichLines = posi;
+        sideOfScreen = side;
         //Sets Enemy car speed
         speed = generator.nextInt(6);
-        position = setLine(whichLines);
-
         //Sets car in proper position !!!!!!!!!!!!!!!!!!!!!!! TO BE VALIDATED
-        x = maxX/5 *position+140;
+        setCarPosition(sideOfScreen);
         y = 0 - bitmap.getHeight();
         // Initialize the hit box
         hitBox = new Rect(x, y, bitmap.getWidth(), bitmap.getHeight());
@@ -51,8 +49,7 @@ public class EnemyCar {
         //If enemy car left the screen respawn it on top with different color.
         if (y> maxY+bitmap.getHeight()){
             speed = generator.nextInt(6);
-            position = setLine(whichLines);
-            x = maxX/5 *position+140;
+            setCarPosition(sideOfScreen);
             y = 0 - bitmap.getHeight();
             setColor(context);
         }
@@ -94,13 +91,19 @@ public class EnemyCar {
             bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.enemy3);
         }
     }
-    public int setLine(int whichLines){
-        if (whichLines == 1) {
-            return  generator.nextInt(2);
-        }else if(whichLines == 2){
-            return generator.nextInt(4-2)+2;
-        }else{
-            return 0;
+
+    public void setCarPosition(int costam){
+        if(costam == 1){
+            x = generator.nextInt(maxX/2-bitmap.getWidth());
+            if (x<0){
+                x=0;
+            }
+        }else if (costam==2){
+            x= generator.nextInt((maxX-bitmap.getWidth()) - maxX/2) + maxX/2 +1;
+            if (x>maxX){
+                x=maxX-bitmap.getWidth();
+            }
         }
+
     }
 }
