@@ -31,8 +31,7 @@ public class AnimationData {
       pathMeasure = new PathMeasure(path, false);
       pathLength = pathMeasure.getLength();
       matrix = new Matrix();
-     // pos = new float[2];
-     // tan = new float[2];
+
       distance = 0;
 
   }

@@ -9,13 +9,20 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PathMeasure;
 import android.graphics.Region;
-import android.os.CountDownTimer;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.widget.Toast;
 
 import java.util.Random;
+
+import static com.artpi.games.a7zamachow.Measurments.dpToPixels;
+import static com.artpi.games.a7zamachow.Measurments.getScreenHeight;
+import static com.artpi.games.a7zamachow.Measurments.getScreenWidth;
+import static com.artpi.games.a7zamachow.Measurments.pixelsToDp;
 
 /**
  * Created by kortm on 6/21/2016.
@@ -31,6 +38,8 @@ public class CTView extends SurfaceView implements Runnable {
     private CardObject right;
     private CardObject[] cards;
     private Region[] regs;
+    private CanvasPoint central;
+    private Shuffler shuffler;
     // For drawing
     private Paint paint;
     private Canvas canvas;
@@ -40,7 +49,7 @@ public class CTView extends SurfaceView implements Runnable {
     private float pathLength;
     float[] pos;
     float[] tan;
-    private int counter = 21;
+    private int counter = 2;
     boolean shuffled = false;
     Matrix matrix;
     float step;   //distance each step
@@ -52,24 +61,68 @@ public class CTView extends SurfaceView implements Runnable {
     public CTView(Context context) {
         super(context);
 
+
+
         // Initialize our drawing objects
         ourHolder = getHolder();
         paint = new Paint();
         cards = new CardObject[3];
         regs = new Region[3];
-        cards[0] = new CardObject(context,140,false, CardObject.Pos.LEFT );
+
+
+
+
+        cards[0] = new CardObject(context,false, CardObject.Pos.LEFT );
         cards[0].setFront(BitmapFactory.decodeResource
                 (context.getResources(), R.drawable.ace_of_diamonds));
-        regs[0] = new Region(140, 150, 284, 350);
-        cards[1]= new CardObject(context,460, true, CardObject.Pos.CENTER);
+        cards[0].setB_reverse(BitmapFactory.decodeResource(context.getResources(), R.drawable.card_reverse2));
+
+
+        cards[1]= new CardObject(context, true, CardObject.Pos.CENTER);
         cards[1].setFront(BitmapFactory.decodeResource
                 (context.getResources(), R.drawable.qc));
-        regs[1] = new Region(460, 150, 604, 350);
-        cards[2] = new CardObject(context,780, false, CardObject.Pos.RIGHT);
+        cards[1].setB_reverse(BitmapFactory.decodeResource(context.getResources(), R.drawable.card_reverse2));
+
+
+        cards[2] = new CardObject(context, false, CardObject.Pos.RIGHT);
         cards[2].setFront(BitmapFactory.decodeResource
                 (context.getResources(), R.drawable.qh));
-        regs[2] = new Region(780, 150, 924, 350);
+        cards[2].setB_reverse(BitmapFactory.decodeResource(context.getResources(), R.drawable.card_reverse2));
 
+
+        int card_width = cards[0].getBitmap().getWidth();
+        int card_height = cards[0].getBitmap().getHeight();
+
+        central = calculateCenterCoordinates(cards[1]);
+        CanvasPoint left = new CanvasPoint(central.getX() - card_width - 50 ,central.getY());
+        CanvasPoint right = new CanvasPoint(central.getX() + card_width + 50 ,central.getY());
+
+        shuffler = new Shuffler(central.getX(), left.getX(), right.getX(), central.getY());
+
+        cards[1].setTargetPos(central);
+        cards[0].setTargetPos(left);
+        cards[2].setTargetPos(right);
+
+        for(CardObject card : cards)
+        {
+            card.setPosSet(left, central, right);
+        }
+
+        regs[0] = new Region(left.getX(), 150, left.getX() + dpToPixels(138), left.getY() + dpToPixels(200));
+        regs[1] = new Region(central.getX(), 150, central.getX() + dpToPixels(138), central.getY() + dpToPixels(200));
+        regs[2] = new Region(right.getX(), 150, right.getX() + dpToPixels(138), left.getY() + dpToPixels(200));
+    }
+
+    public CanvasPoint calculateCenterCoordinates(CardObject card){
+        int card_width = card.getBitmap().getWidth();
+        int card_height = card.getBitmap().getHeight();
+        int canvas_width = Measurments.getScreenWidth(getContext());
+        int canvas_height = Measurments.getScreenHeight(getContext());
+
+        int x = canvas_width - card_width >> 1;
+        int y = canvas_height - card_height >> 1;
+
+        return new CanvasPoint(x, y);
 
 
     }
@@ -81,26 +134,27 @@ public class CTView extends SurfaceView implements Runnable {
                 switch (stage){
 
                     case 0:
+                        dowWait(1000);
                         draw();
-                        dowWait(2000);
+                        dowWait(3500);
                         cards[0].flip(getContext());
                         draw();
-                        dowWait(500);
+                        dowWait(1500);
                         cards[1].flip(getContext());
                         draw();
-                        dowWait(500);
+                        dowWait(1500);
                         cards[2].flip(getContext());
                         draw();
-                        dowWait(500);
+                        dowWait(1500);
                         draw();
-                        dowWait(500);
+                        dowWait(1500);
                         cards[0].flip(getContext());
                         draw();
-                        dowWait(500);
+                        dowWait(1500);
                         draw();
                         cards[1].flip(getContext());
                         draw();
-                        dowWait(500);
+                        dowWait(1500);
                         draw();
                         cards[2].flip(getContext());
                         draw();
@@ -110,7 +164,7 @@ public class CTView extends SurfaceView implements Runnable {
 
                     case 1:
                         draw();
-                        update(30);
+                        update(15);
                         control();
                         break;
 
@@ -126,7 +180,7 @@ public class CTView extends SurfaceView implements Runnable {
         boolean anyMoving = false;
         for(CardObject card : cards) {
             if (!card.animCompleted()) {
-                card.increaseAnimDistance(v);
+                card.increaseAnimDistance(dpToPixels(v));
             } else {
                 card.stop();
             }
@@ -145,9 +199,9 @@ public class CTView extends SurfaceView implements Runnable {
     }
 
     private void prepareCards(){
-       // action++;
-       // action = action%3;
-        action = generator.nextInt(3);
+
+       // action = generator.nextInt(3);
+        action = 0;
         Log.i("APP", "Action::"+ Integer.toString(action));
         for(CardObject card : cards) {
             if (card.pos == CardObject.Pos.LEFT) {
@@ -163,11 +217,11 @@ public class CTView extends SurfaceView implements Runnable {
         counter--;
        if (counter >0) {
            if (action == 1) {
-               Shuffler.switchLeftRight(left, right);
+               shuffler.switchLeftRight(left, right);
            } else if (action == 0) {
-               Shuffler.switchCenterLeft(center, left);
+               shuffler.switchCenterLeft(center, left);
            } else {
-               Shuffler.switchCenterRight(center, right);
+               shuffler.switchCenterRight(center, right);
            }
        }
         else{
@@ -234,6 +288,12 @@ public class CTView extends SurfaceView implements Runnable {
             gameThread.start();
 
     }
+
+    public static float dipToPixels(Context context, float dipValue) {
+        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dipValue, metrics);
+    }
+
     @Override
     public boolean onTouchEvent(MotionEvent event){
         if(!shuffled)
@@ -259,6 +319,7 @@ public class CTView extends SurfaceView implements Runnable {
         }
         return true;
     }
+
 
 
 

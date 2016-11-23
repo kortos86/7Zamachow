@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 public class A3CardsGame extends AppCompatActivity {
+
     private CTView gameView;
 
     @Override
