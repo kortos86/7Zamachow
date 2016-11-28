@@ -55,7 +55,7 @@ public class AnimationData {
     public void setDistance(float value){
         distance = value;
     }
-   public boolean completed (){
+    public boolean completed (){
         return distance >=pathLength;
     }
     public Path getPath(){
