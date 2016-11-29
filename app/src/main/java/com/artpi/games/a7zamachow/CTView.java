@@ -40,6 +40,7 @@ public class CTView extends SurfaceView implements Runnable {
     private Region[] regs;
     private CanvasPoint central;
     private Shuffler shuffler;
+
     // For drawing
     private Paint paint;
     private Canvas canvas;
@@ -49,7 +50,7 @@ public class CTView extends SurfaceView implements Runnable {
     private float pathLength;
     float[] pos;
     float[] tan;
-    private int counter = 2;
+    private int counter = 21;
     boolean shuffled = false;
     Matrix matrix;
     float step;   //distance each step
@@ -134,9 +135,7 @@ public class CTView extends SurfaceView implements Runnable {
                 switch (stage){
 
                     case 0:
-                        dowWait(1000);
-                        draw();
-                        dowWait(3500);
+                        initCards();
                         cards[0].flip(getContext());
                         draw();
                         dowWait(1500);
@@ -192,16 +191,20 @@ public class CTView extends SurfaceView implements Runnable {
 
     }
 
+    private void paintInstructions(){
+
+    }
+
     private void initCards(){
-        cards[0].setAnimData(Shuffler.init_to_left());
-        cards[1].setAnimData(Shuffler.init_to_center());
-        cards[2].setAnimData(Shuffler.init_to_right());
+        dowWait(100);
+        draw();
+        dowWait(3500);
     }
 
     private void prepareCards(){
 
-       // action = generator.nextInt(3);
-        action = 0;
+        action = generator.nextInt(3);
+
         Log.i("APP", "Action::"+ Integer.toString(action));
         for(CardObject card : cards) {
             if (card.pos == CardObject.Pos.LEFT) {
