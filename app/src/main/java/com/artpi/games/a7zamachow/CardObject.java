@@ -21,27 +21,24 @@ public class CardObject {
     private boolean reverse = true;
     private AnimationData anim;
     private Bitmap bitmap;
-    private Point cornerCord;
+    private CanvasPoint cornerCord;
     private Bitmap front;
+    private Bitmap b_reverse;
     private int speed = 0;
     private Region reg;
     public enum Pos  {
         LEFT, CENTER, RIGHT
     }
 
-    public EnumMap<Pos, Point> posSet = new EnumMap<Pos, Point>(Pos.class);
+    public EnumMap<Pos, CanvasPoint> posSet = new EnumMap<Pos, CanvasPoint>(Pos.class);
     Pos pos;
     private final boolean winning;
 
     private boolean left;
 
-    public CardObject(Context context, int x, boolean winning, Pos pos) {
+    public CardObject(Context context,  boolean winning, Pos pos) {
 
-        posSet.put(Pos.LEFT, new Point(140,150));
-        posSet.put(Pos.CENTER, new Point(460,150));
-        posSet.put(Pos.RIGHT, new Point(780,150));
-
-        this.cornerCord = new Point(x,150);
+        this.cornerCord = new CanvasPoint(0,0);
         speed = 5;
         bitmap = BitmapFactory.decodeResource
                 (context.getResources(), R.drawable.card_reverse);
@@ -82,8 +79,7 @@ public class CardObject {
             reverse=false;
         }
         else{
-            bitmap = BitmapFactory.decodeResource
-                    (context.getResources(), R.drawable.card_reverse);
+            bitmap = this.b_reverse;
             reverse= true;
         }
     }
@@ -123,9 +119,19 @@ public class CardObject {
         front =b;
     }
 
-    public void setTargetPos(Point p){
+    public void setTargetPos(CanvasPoint p){
         cornerCord.setX(p.getX());
         cornerCord.setY(p.getY());
+    }
+
+    public void setB_reverse(Bitmap b_reverse) {
+        this.b_reverse = b_reverse;
+        this.bitmap = b_reverse;
+    }
+    public void setPosSet(CanvasPoint left, CanvasPoint center, CanvasPoint right){
+        posSet.put(Pos.LEFT, left);
+        posSet.put(Pos.CENTER, center);
+        posSet.put(Pos.RIGHT, right);
     }
 
     public boolean animCompleted(){
