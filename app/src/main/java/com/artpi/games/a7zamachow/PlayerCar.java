@@ -11,7 +11,8 @@ public class PlayerCar {
     //Holds position on image
     private int x, y;
     //Player Car Speed
-    private int speed = 25;
+    private float speed = 25;
+    private float newspeed = 25;
     //Holds info if car is turning left or right
     private boolean turningLeft = false;
     private boolean turningRight = false;
@@ -57,13 +58,19 @@ public class PlayerCar {
         hitBox.top = y;
         hitBox.right = x + bitmap.getWidth();
         hitBox.bottom = y + bitmap.getHeight();
+
+        if((speed!=newspeed)&&(newspeed<speed)){
+            speed-=0.5;
+        }else if((speed!=newspeed)&&(newspeed>speed)){
+            speed+=0.5;
+        }
     }
 
     //Getters
     public Bitmap getBitmap() {
         return bitmap;
     }
-    public int getSpeed() {
+    public float getSpeed() {
         return speed;
     }
     public void setSpeed(int speed2) {
@@ -97,5 +104,13 @@ public class PlayerCar {
 
     public void reduceShieldStrength(){
         shieldStrength --;
+    }
+
+    public void slowCarDown(int finalSpeed){
+        newspeed = finalSpeed;
+    }
+
+    public void speedCarUp(int finalSpeed){
+        newspeed = finalSpeed;
     }
 }

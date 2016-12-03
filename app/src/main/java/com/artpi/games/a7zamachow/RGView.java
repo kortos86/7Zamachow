@@ -30,7 +30,7 @@ public class RGView extends SurfaceView implements  Runnable{
     public EnemyCar enemy2;
     public Coin coin;
     // Make some random sand
-    public ArrayList<SandPoint> sandPoints = new ArrayList<>();
+    public ArrayList<SandPoint> sandPoints = new ArrayList<>(150);
     // For drawing
     private Paint paint;
     private SurfaceHolder ourHolder;
@@ -51,29 +51,6 @@ public class RGView extends SurfaceView implements  Runnable{
     private long timeStarted;
     private long fastestTime;
     private boolean gameEnded;
-
-    //Handler to speed up car after crash
-    Handler handler = new Handler(Looper.getMainLooper());
-    final Runnable r2 = new Runnable() {
-        public void run() {
-            enemyBoom = false;
-        }
-    };
-    final Runnable r3 = new Runnable() {
-        public void run() {
-            enemyBoom = false;
-            player.setSpeed(25);
-        }
-    };
-    //To slow down Car after coin collected
-    final Runnable r4 = new Runnable() {
-        public void run() {
-            collectedCoin = false;
-            player.setSpeed(25);
-        }
-    };
-
-
 
     public RGView(Context context, int x, int y) {
         super(context);
@@ -96,6 +73,28 @@ public class RGView extends SurfaceView implements  Runnable{
         startGame();
     }
 
+    //Handler to speed up car after crash
+    Handler handler = new Handler(Looper.getMainLooper());
+    final Runnable r2 = new Runnable() {
+        public void run() {
+            enemyBoom = false;
+        }
+    };
+    final Runnable r3 = new Runnable() {
+        public void run() {
+            enemyBoom = false;
+            player.speedCarUp(25);
+        }
+    };
+    //To slow down Car after coin collected
+    final Runnable r4 = new Runnable() {
+        public void run() {
+            collectedCoin = false;
+            player.slowCarDown(25);
+        }
+    };
+
+
     private void startGame(){
         //Initialize game objects
         player = new PlayerCar(context, maxX, maxY);
@@ -105,8 +104,8 @@ public class RGView extends SurfaceView implements  Runnable{
         coin = new Coin(context, maxX, maxY);
         //Number of Sand dots
         int howMuchSand = 150;
-
-        for (int j = 1; j <= howMuchSand; j++) {
+        sandPoints.clear();
+        for (int j = 0; j < howMuchSand; j++) {
                 SandPoint spec = new SandPoint( maxX, maxY);
                 sandPoints.add(spec);
         }
@@ -160,8 +159,8 @@ public class RGView extends SurfaceView implements  Runnable{
         }
         // If coin collected speed up for 1 second
         if (collectedCoin) {
-            player.setSpeed(45);
-            handler.postDelayed(r4, 1000);
+            player.speedCarUp(45);
+            handler.postDelayed(r4, 3000);
             collectedCoin = false;
         }
 

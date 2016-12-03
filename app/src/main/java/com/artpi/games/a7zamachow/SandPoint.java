@@ -6,7 +6,7 @@ import java.util.Random;
 
 public class SandPoint {
     private int x, y;
-    private int speed;
+    private float speed;
     // Detect dust leaving the screen
     private int maxX;
     private int maxY;
@@ -23,7 +23,7 @@ public class SandPoint {
         x = generator.nextInt(maxX);
         y = generator.nextInt(maxY);
     }
-    public void update(int playerSpeed){
+    public void update(float playerSpeed){
 // Speed up when the player does
         y += playerSpeed;
         y += speed;

@@ -15,14 +15,14 @@ public class EnemyCar {
     //Holds position on image
     private int x, y;
     //car default speed
-    private int speed;
+    private float speed;
     // Detect enemies leaving the screen
     private int maxX;
     // Spawn enemies within screen bounds
     private int maxY;
     private Rect hitBox;
-    int sideOfScreen;
-    Random generator = new Random();
+    private int sideOfScreen;
+    private Random generator = new Random();
 
 
     // Constructor
@@ -42,7 +42,7 @@ public class EnemyCar {
         hitBox = new Rect(x, y, bitmap.getWidth(), bitmap.getHeight());
 
     }
-    public void update(Context context, int playerSpeed){
+    public void update(Context context, float playerSpeed){
         //Move enemy car down, taking into account player speed and coin speed
         y += playerSpeed;
         y += speed;
@@ -92,7 +92,7 @@ public class EnemyCar {
         }
     }
 
-    public void setCarPosition(int side){
+    private void setCarPosition(int side){
         if(side == 1){
             x = generator.nextInt(maxX/2-bitmap.getWidth());
             if (x<0){

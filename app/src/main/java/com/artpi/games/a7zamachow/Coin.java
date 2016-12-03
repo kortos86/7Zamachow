@@ -13,11 +13,11 @@ public class Coin {
     //Image of the coin presented to user
     private Bitmap bitmap;
     //Random generator
-    Random generator = new Random();
+    private Random generator = new Random();
     //Holds position on image
     private int x, y;
     //Coins default speed
-    private int speed = generator.nextInt(6);
+    private float speed = generator.nextInt(6);
     // Detect  coin leaving the screen
     private int maxX;
     // Spawn coin within screen bounds
@@ -25,10 +25,10 @@ public class Coin {
     //Hitbox
     private Rect hitBox;
     //Used to change the bitmap of coin to get spinning effect;
-    int rotuj = 1;
+    private int rotuj = 1;
     //Slows down the spinning
-    int delay =0;
-    int maxDelay =5;
+    private int delay =0;
+    private int maxDelay =5;
 
 
 
@@ -51,7 +51,7 @@ public class Coin {
 
     }
 
-    public void update(Context context, int playerSpeed){
+    public void update(Context context, float playerSpeed){
         //Move coin down, taking into account player speed and coin speed
         y += playerSpeed;
         y += speed;
