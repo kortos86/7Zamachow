@@ -139,23 +139,28 @@ public class RGView extends SurfaceView implements  Runnable{
             enemy1.setY(enemy1.getY()+1000);
             enemyBoom  = true;
             removeShield  = true;
-            handler.removeCallbacks(r2);
-            handler.removeCallbacks(r3);
+
+            removeCallbacks();
+            //handler.removeCallbacks(r2);
+            //handler.removeCallbacks(r3);
         }
         if(Rect.intersects
                 (player.getHitbox(), enemy2.getHitbox())){
             enemy2.setY(enemy2.getY()+1000);
             enemyBoom  = true;
             removeShield  = true;
-            handler.removeCallbacks(r2);
-            handler.removeCallbacks(r3);
+            removeCallbacks();
+            //handler.removeCallbacks(r2);
+            //handler.removeCallbacks(r3);
+
         }
         // Coin Collection detection
         if(Rect.intersects
                 (player.getHitbox(), coin.getHitbox())){
             coin.setY(coin.getY()+1000);
             collectedCoin  = true;
-            handler.removeCallbacks(r4);
+            removeCallbacks();
+            //handler.removeCallbacks(r4);
         }
         // If coin collected speed up for 1 second
         if (collectedCoin) {
@@ -317,6 +322,12 @@ public class RGView extends SurfaceView implements  Runnable{
                 break;
         }
         return true;
+    }
+
+    public void removeCallbacks(){
+        handler.removeCallbacks(r2);
+        handler.removeCallbacks(r3);
+        handler.removeCallbacks(r4);
     }
 }
 

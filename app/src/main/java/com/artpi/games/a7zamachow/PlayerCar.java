@@ -75,6 +75,7 @@ public class PlayerCar {
     }
     public void setSpeed(int speed2) {
         speed = speed2;
+        newspeed = speed2;
     }
     public int getX() {
         return x;
