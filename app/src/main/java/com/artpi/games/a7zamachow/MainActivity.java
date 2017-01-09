@@ -57,4 +57,10 @@ public class MainActivity extends AppCompatActivity {
         MainActivity.this.startActivity(myIntent);
     }
 
+    public void matchingOnClick (View V) {
+        Intent myIntent = new Intent(MainActivity.this, MatchGame.class);
+        //myIntent.putExtra("key", value);
+        MainActivity.this.startActivity(myIntent);
+    }
+
 }
